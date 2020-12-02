@@ -12,14 +12,27 @@ where P: AsRef<Path>, {
 
 // https://stackoverflow.com/questions/26643688/how-do-i-split-a-string-in-rust
 fn check_pw_validity(pw: String ) -> bool {
-    let mut split = pw.split(":");
-    for item in split{
-
-        println!("{}",item);
-    }
-    true
+    let rule_pass_split: Vec<&str> = pw.split(":").collect();
+    let rule = rule_pass_split[0];
+    let range_letter_split: Vec<&str> = rule.split(" ").collect();
     
+    let pass = rule_pass_split[1];
+    let range = range_letter_split[0];
+    let letter = range_letter_split[1];
+    
+    let upper_lower_split: Vec<&str> = range.split("-").collect();
+    let upper = upper_lower_split[1].parse::<usize>().unwrap();
+    let lower = upper_lower_split[0].parse::<usize>().unwrap();
+    
+    let letter_count = pass.matches(letter).count();
+    println!("{} {}",pw,letter_count);
+    if letter_count <= upper && letter_count >= lower {
+        true
+    } else {
+        false
+    }
 }
+    
 
 fn main() {
     let mut pw_vec: Vec<String> = vec![];
