@@ -11,7 +11,7 @@ where P: AsRef<Path>, {
 }
 
 // https://stackoverflow.com/questions/26643688/how-do-i-split-a-string-in-rust
-fn check_pw_validity(pw: String ) -> bool {
+fn check_pw_validity(pw: String ) -> (bool,bool) {
     let rule_pass_split: Vec<&str> = pw.split(":").collect();
     let rule = rule_pass_split[0];
     let range_letter_split: Vec<&str> = rule.split(" ").collect();
@@ -26,17 +26,26 @@ fn check_pw_validity(pw: String ) -> bool {
     
     let letter_count = pass.matches(letter).count();
     println!("{} {}",pw,letter_count);
-    if letter_count <= upper && letter_count >= lower {
-        true
-    } else {
-        false
-    }
+    
+    let first_letter = pass.as_bytes()[lower];
+    let last_letter = pass.as_bytes()[upper];
+    let letter_c = pass.as_bytes()[1];
+    println!("{} {} {}",letter_c as char ,first_letter as char,last_letter as char);
+    
+
+    return (letter_count <= upper && letter_count >= lower,
+            first_letter as char != last_letter as char &&
+            (first_letter as char == letter_c as char &&
+            last_letter as char == letter_c as char)) 
 }
     
 
+
+
 fn main() {
     let mut pw_vec: Vec<String> = vec![];
-    let mut count:i32 = 0;
+    let mut count1:i32 = 0;
+    let mut count2:i32 = 0;
     // File hosts must exist in current path before this produces output
     if let Ok(lines) = read_lines("./input") {
         // Consumes the iterator, returns an (Optional) String
@@ -49,12 +58,20 @@ fn main() {
     } else {
         println!("error on input")
     }
+
+    let mut p1:bool;
+    let mut p2:bool;
+
     for pw in pw_vec{
-        if check_pw_validity(pw){
-            count=count+1;
+        let (p1,p2) = check_pw_validity(pw);
+        if p1{
+            count1=count1+1;
+        }
+        if p2{
+            count2=count2+1;
         }
     }
-    println!("{}",count)
-    
+    println!("prob1 {}",count1);
+    println!("prob2 {}",count2);
     
 }
