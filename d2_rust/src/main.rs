@@ -25,17 +25,26 @@ fn check_pw_validity(pw: String ) -> (bool,bool) {
     let lower = upper_lower_split[0].parse::<usize>().unwrap();
     
     let letter_count = pass.matches(letter).count();
-    println!("{} {}",pw,letter_count);
+    //println!("{} {}",pw,letter_count);
     
     let first_letter = pass.as_bytes()[lower];
     let last_letter = pass.as_bytes()[upper];
     let letter_c = pass.as_bytes()[1];
-    println!("{} {} {}",letter_c as char ,first_letter as char,last_letter as char);
+
+    let bool2 = first_letter as char != last_letter as char &&
+            (first_letter as char == letter_c as char ||
+            last_letter as char == letter_c as char);
+
+    println!("{} pass {} target {} first {} last {}; bool {}", range,
+                                                   pass,letter_c as char,
+                                                   first_letter as char,
+                                                   last_letter as char, 
+                                                   bool2);
     
 
     return (letter_count <= upper && letter_count >= lower,
             first_letter as char != last_letter as char &&
-            (first_letter as char == letter_c as char &&
+            (first_letter as char == letter_c as char ||
             last_letter as char == letter_c as char)) 
 }
     
