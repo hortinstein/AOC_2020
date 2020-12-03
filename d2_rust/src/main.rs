@@ -29,11 +29,12 @@ fn check_pw_validity(pw: String ) -> (bool,bool) {
     
     let first_letter = pass.as_bytes()[lower];
     let last_letter = pass.as_bytes()[upper];
-    let letter_c = pass.as_bytes()[1];
+    println!("{}",pass);
+    let letter_c = letter.as_bytes()[0];
 
-    let bool2 = first_letter as char != last_letter as char &&
-            (first_letter as char == letter_c as char ||
-            last_letter as char == letter_c as char);
+    let bool2 = (first_letter as char == letter_c as char ||
+            last_letter as char == letter_c as char) && 
+            first_letter as char != last_letter as char;
 
     println!("{} pass {} target {} first {} last {}; bool {}", range,
                                                    pass,letter_c as char,
@@ -42,10 +43,7 @@ fn check_pw_validity(pw: String ) -> (bool,bool) {
                                                    bool2);
     
 
-    return (letter_count <= upper && letter_count >= lower,
-            first_letter as char != last_letter as char &&
-            (first_letter as char == letter_c as char ||
-            last_letter as char == letter_c as char)) 
+    return (letter_count <= upper && letter_count >= lower,bool2)
 }
     
 
@@ -83,4 +81,29 @@ fn main() {
     println!("prob1 {}",count1);
     println!("prob2 {}",count2);
     
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn sample_01() {
+        let data = "1-3 a: abcde".to_string();
+
+        assert_eq!((true,true),check_pw_validity(data));
+    }
+    #[test]
+    fn sample_02() {
+        let data = "1-3 b: cdefg".to_string();
+
+        assert_eq!((false,false),check_pw_validity(data));
+    }
+    #[test]
+    fn sample_03() {
+        let data = "2-9 c: ccccccccc".to_string();
+
+        assert_eq!((true,false),check_pw_validity(data));
+    }
+
 }
