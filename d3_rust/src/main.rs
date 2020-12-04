@@ -14,6 +14,11 @@ where P: AsRef<Path>, {
     Ok(io::BufReader::new(file).lines())
 }
 
+fn n_mod_m <T: std::ops::Rem<Output = T> + std::ops::Add<Output = T> + Copy>
+  (n: T, m: T) -> T {
+    ((n % m) + m) % m
+}
+
 // fn remove_whitespace(s: &mut String) {
 //     s.retain(|c| !c.is_whitespace());
 // }
@@ -31,17 +36,22 @@ fn tree_collision(slope: Vec<String>) -> u32 {
     let mut y:usize = 1;
     //hard coded slice len
     println!("{}",slope[y].len());
+    println!("{}",slope[y].len());
+
     let slope_len= slope.len();
     let mut done = false;
     let mut x:usize = 0;
     while !done {
-        println!("{}",slope[y]);
-        let s: u8 = slope[y].as_bytes()[x % slope_len];
+
+        let mod_x = n_mod_m(x, slope_len);
+        
+        println!("{}", mod_x);
+        let s: u8 = slope[y].as_bytes()[mod_x];
         if '#' as char == s as char{
             tree_count+=1;
         }
         y += 1;
-        x += 1;
+        x += 3;
         if y> slope_len {
             done = true;
         }
