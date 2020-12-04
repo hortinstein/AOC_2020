@@ -43,7 +43,7 @@ def check_field_data(record_line):
     split = record_line.split(' ')
     print (split)
     for field in split:
-        print (field)
+        #print (field)
         if ('byr' in field):
             if not len_min_max(field,8,1920,2002): 
                 print ('byr failure')
@@ -70,15 +70,15 @@ def check_field_data(record_line):
             if field[4] != '#': 
                 print ('hcl failure')
                 return False
-            if len(field) != 11 and not all(c in string.hexdigits for c in field[5:10]): 
+            if len(field) != 11 or not all(c in string.hexdigits for c in field[5:10]): 
                 print ('hcl failure')
                 return False
         if ('ecl' in field):
-            if not len(field) != 7 and field[4:7] not in ["amb","blu","brn","gry","grn","hzl","oth"]:  
+            if len(field) != 7 or field[4:7] not in ["amb","blu","brn","gry","grn","hzl","oth"]:  
                 print ('ecl failure')
                 return False
         if ('pid' in field):
-            if not len(field) != 13 and not field[4:].isdigit(): 
+            if len(field) != 13 and not field[4:].isdigit(): 
                 print ('pid failure')
                 return False
     return True
